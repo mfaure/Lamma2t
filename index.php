@@ -3,7 +3,7 @@
 $myModelInitDate = NULL;
 $myModelValidDate = NULL;
 
-define('HOUR_INCREMENT', '2');
+define('HOUR_INCREMENT', '1');
 $myDateFormat = 'l j F Y H:i';
 $myDateFormat2 = 'D j/m/y H\hi e';
 $myDateFormatI18n = '%a %e/%m/%y %k\h%M e';
@@ -27,7 +27,7 @@ $myModelRun02Utc = new DateTime("now", $tzParis);
 $myTimeStamp->setTimezone($tzUTC);
 
 // Horaires UTC de mises à jour du modèle WW3 Lamma Rete
-// cf http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello
+// cf http://www.lamma.rete.toscana.it/meteo/modelli/wrf-info-sul-modello
 $myModelRun01Utc = $myModelRun01Utc->setTime(7,30);
 $myModelRun02Utc = $myModelRun02Utc->setTime(21,30);
 

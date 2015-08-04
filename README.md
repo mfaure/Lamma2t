@@ -4,10 +4,10 @@
 
 ## Problem
 
-[Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare)
+Using [Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) I encounter two main issues :
 
-* the geographical zone (e.g. Bonifacio) is not part of the URL: user must do an action to get to it
-* webpage is heavy and not optimised for 3G (data on cell phone), and this may be costy if you are abroad
+* The geographical zone (e.g. Bonifacio) is not part of the URL: user must do an action to get to it.
+* Webpage is heavy and not optimised for 3G (data on cell phone), and this may be costy if you are abroad
 
 ## Solution
 
@@ -21,5 +21,7 @@
 * pngcrush
 * PHP 5.3
 * php5-intl (IntlDateFormatter)
+
+One click dependency install : `sudo apt-get install wget pngcrush php5-intl`
 
 ## Install
