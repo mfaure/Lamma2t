@@ -1,7 +1,13 @@
 <?php
 
 define('HOUR_INCREMENT', '1');
-define('MAX_FORECAST', '57'); // 57 = max given by Lamma Rete 
+define('MAX_FORECAST', '37'); 
+/* 
+ * Values for MAX_FORECAST defined by LammaRete behavior :
+ * - from 1 to 37 : 37 forecasts, step = 1 hour
+ * - from 37 to 49 : step = 3hours
+ * - from 49 to 57 : step = 6 hours
+ */
 
 $myModelInitDate = NULL;
 $myModelValidDate = NULL;
@@ -84,9 +90,12 @@ $myDateIntervalString = "PT" . $myLoopInit . "H";;
 $myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
 for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
 	$myImageNumber = $i+1;
-
-        echo "<div id=\"forecast-" . $i . "\">";
-	echo "  <h2>" . $myDateFormatter->format($myModelValidDate) ." <span class=\"tzSmall\">". $myDateFormatterTz->format($myModelValidDate). "</span></h2>\n";
+        $j = $i - $myLoopInit;
+        
+        echo "<div id=\"forecast-" . $j . "\">";
+	echo "  <h2>" . $myDateFormatter->format($myModelValidDate);
+        echo " <span class=\"tzSmall\">". $myDateFormatterTz->format($myModelValidDate). "</span>";
+        echo "</h2>\n";
 	echo "  <p>";
 	echo "      <img src=\"" . $myUrlStub . $myImageNumber . $myImageExt . "\" ";
 	echo "      alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($myModelValidDate) . "\"/>";
