@@ -1,12 +1,12 @@
 <?php
 
 define('HOUR_INCREMENT', '1');
-define('MAX_FORECAST', '37'); 
+define('MAX_FORECAST', '36'); 
 /* 
  * Values for MAX_FORECAST defined by LammaRete behavior :
- * - from 1 to 37 : 37 forecasts, step = 1 hour
- * - from 37 to 49 : step = 3hours
- * - from 49 to 57 : step = 6 hours
+ * - from 0 to 36  : step between 2 forecasts = 1 hour
+ * - from 37 to 48 : step between 2 forecasts = 3 hours
+ * - from 49 to 56 : step between 2 forecasts = 6 hours
  */
 
 $myModelInitDate = NULL;
@@ -74,6 +74,7 @@ $myModelInitDate->setTimezone($tzParis);
 </style>
 </head>
 <body>
+<script src="jquery-1.11.3.min.js"></script>    
 <h1>Prévisions météo pour mes stages Glénans Bouches de Bonif / Archipel Maddalena</h1>
 <p><a href="#metaInfo">Pourquoi cette page ?</a></p>
 
