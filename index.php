@@ -71,13 +71,66 @@ $myModelInitDate->setTimezone($tzParis);
 <meta charset="UTF-8" >
 <style type="text/css">
 .tzSmall {font-size: small; font-weight:normal;}
+
+.slideshow {
+    position: relative;
+    /* necessary to absolutely position the images inside */
+    width: 760px;
+    /* same as the images inside */
+    height: 670px;
+}
+.slideshow .forecast-unit {
+    position: absolute;
+    display: none;
+}
+.slideshow .forecast-unit:first-child {
+    display: block;
+    /* overrides the previous style */
+}
 </style>
 </head>
 <body>
-<script src="jquery-1.11.3.min.js"></script>    
+    
+<script src="jquery-1.11.3.min.js"></script>
+<script>
+var interval = undefined;
+$(document).ready(function () {
+    //interval = setInterval(getNext, 2000); // milliseconds
+    $('#next').on('click', getNext);
+    $('#prev').on('click', getPrev);
+});
+
+function getNext() {
+    var $curr = $('.slideshow .forecast-unit:visible'),
+        $next = ($curr.next().length) ? $curr.next() : $('.slideshow .forecast-unit').first();
+
+    transition($curr, $next);
+}
+
+function getPrev() {
+    var $curr = $('.slideshow .forecast-unit:visible'),
+        $next = ($curr.prev().length) ? $curr.prev() : $('.slideshow .forecast-unit').last();
+    transition($curr, $next);
+}
+
+function transition($curr, $next) {
+    //clearInterval(interval);
+
+    $next.css('z-index', 2).fadeIn('fast', function () {
+        $curr.hide().css('z-index', 0);
+        $next.css('z-index', 1);
+    });
+}
+</script>
+
 <h1>Prévisions météo pour mes stages Glénans Bouches de Bonif / Archipel Maddalena</h1>
 <p><a href="#metaInfo">Pourquoi cette page ?</a></p>
 
+<button id="prev">&lt; Précédent</button>
+<button id="next">Suivant &gt;</button>
+
+<div class="slideshow">
+    
 <?php
 # Images directly from LammaRete (without crop nor optimisation)
 $myUrlStub='http://www.lamma.rete.toscana.it/models/ventoemare/wind10m_N_web_';
@@ -93,7 +146,7 @@ for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
 	$myImageNumber = $i+1;
         $j = $i - $myLoopInit;
         
-        echo "<div id=\"forecast-" . $j . "\">";
+        echo "<div class=\"forecast-unit\" id=\"forecast-" . $j . "\">";
 	echo "  <h2>" . $myDateFormatter->format($myModelValidDate);
         echo " <span class=\"tzSmall\">". $myDateFormatterTz->format($myModelValidDate). "</span>";
         echo "</h2>\n";
@@ -107,6 +160,9 @@ for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
 	$myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
 }
 ?>
+
+</div>
+
 <h2 id="metaInfo">Informations</h2>
 <h3>Pourquoi cette page ?</h3>
 <p>J'ai réalisé cette page pour mes besoins propres de navigation dans les bouches de Bonficio et l'Archipel de la Maddalena, typiquement lors d'encadrement de stages à l'école de voile Les Glénans.</p>
