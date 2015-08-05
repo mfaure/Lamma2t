@@ -1,9 +1,11 @@
 <?php
 
+define('HOUR_INCREMENT', '1');
+define('MAX_FORECAST', '57'); // 57 = max given by Lamma Rete 
+
 $myModelInitDate = NULL;
 $myModelValidDate = NULL;
 
-define('HOUR_INCREMENT', '1');
 $myDateFormat = 'l j F Y H:i';
 $myDateFormat2 = 'D j/m/y H\hi e';
 $myDateFormatI18n = '%a %e/%m/%y %k\h%M e';
@@ -25,16 +27,19 @@ $myModelRun01Utc = new DateTime("now", $tzParis);
 $myModelRun02Utc = new DateTime("now", $tzParis);
 
 $myTimeStamp->setTimezone($tzUTC);
+$myModelRun01Utc->setTimezone($tzUTC);
+$myModelRun02Utc->setTimezone($tzUTC);
 
-// Horaires UTC de mises à jour du modèle WW3 Lamma Rete
-// cf http://www.lamma.rete.toscana.it/meteo/modelli/wrf-info-sul-modello
+// UTC hours of model updates:
+// * http://www.lamma.rete.toscana.it/meteo/modelli/wrf-info-sul-modello
+// * http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello
 $myModelRun01Utc = $myModelRun01Utc->setTime(7,30);
 $myModelRun02Utc = $myModelRun02Utc->setTime(21,30);
 
 if ( $myTimeStamp <= $myModelRun01Utc ) {
 	// avant 7h30 UTC: init = J-1 à 12h UTC
 	$myModelInitDate = new DateTime("now", $tzUTC);
-	$myModelInitDate = $myModelInitDate->sub(new DateInterval('P1D'));
+	$myModelInitDate = $myModelInitDate->sub(new DateInterval('P1D')); // P1D = Period 1 day cf http://php.net/manual/fr/dateinterval.construct.php
 	$myModelInitDate = $myModelInitDate->setTime(12, 00);
 	$myLoopInit = "9";
 
@@ -77,14 +82,16 @@ $myImageExt=".optimised.png";
 $myModelValidDate = $myModelInitDate;
 $myDateIntervalString = "PT" . $myLoopInit . "H";;
 $myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
-for ($i = $myLoopInit; $i <= 37; $i+=HOUR_INCREMENT) {
+for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
 	$myImageNumber = $i+1;
 
-	echo "<h2>" . $myDateFormatter->format($myModelValidDate) ." <span class=\"tzSmall\">". $myDateFormatterTz->format($myModelValidDate). "</span></h2>\n";
-	echo "<p>";
-	echo "<img src=\"" . $myUrlStub . $myImageNumber . $myImageExt . "\" ";
-	echo "alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($myModelValidDate) . "\"/>";
-	echo "</p>\n \n";
+        echo "<div id=\"forecast-" . $i . "\">";
+	echo "  <h2>" . $myDateFormatter->format($myModelValidDate) ." <span class=\"tzSmall\">". $myDateFormatterTz->format($myModelValidDate). "</span></h2>\n";
+	echo "  <p>";
+	echo "      <img src=\"" . $myUrlStub . $myImageNumber . $myImageExt . "\" ";
+	echo "      alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($myModelValidDate) . "\"/>";
+	echo "  </p>\n \n";
+        echo "</div>";
 	
 	$myDateIntervalString = "PT" . HOUR_INCREMENT . "H";;
 	$myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
@@ -93,7 +100,7 @@ for ($i = $myLoopInit; $i <= 37; $i+=HOUR_INCREMENT) {
 <h2 id="metaInfo">Informations</h2>
 <h3>Pourquoi cette page ?</h3>
 <p>J'ai réalisé cette page pour mes besoins propres de navigation dans les bouches de Bonficio et l'Archipel de la Maddalena, typiquement lors d'encadrement de stages à l'école de voile Les Glénans.</p>
-<p>Le site <a href="http://www.lamma.rete.toscana.it/mare/modelli/vento-e-mare" lang="it">Consorzio LaMMA Rete</a> est particulièrement utile car il offre une représentation visuelle du champs de vent et ceci heure par heure. Par contre l'interface utilisateur du site est assez peu pratique, surtout sur téléphone mobile et en réseau 3G.</p>
+<p>Le site <a href="http://www.lamma.rete.toscana.it/meteo/modelli/ventomare" lang="it">Consorzio LaMMA Rete</a> est particulièrement utile car il offre une représentation visuelle du champs de vent et ceci heure par heure. Par contre l'interface utilisateur du site est assez peu pratique, surtout sur téléphone mobile et en réseau 3G.</p>
 <p>C'est pour répondre à ce besoin que j'ai créé cette page. Si je résume mon cahier des charges, ça donne ceci : </p>
 <ul>
 <li>Avoir en une seule page, les prévisions de vent toutes les 2 heures pour les 36 heures à venir.</li>
