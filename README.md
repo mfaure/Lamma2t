@@ -25,3 +25,25 @@ Using [Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/model
 One click dependency install : `sudo apt-get install wget pngcrush php5-intl`
 
 ## Install
+
+@@@
+
+## Web performance
+
+### Methodology
+
+Use Firefox, Press CTRL-SHIT-I, use Network panel and reload page. Make 3 measures, and compute average value for each metric.
+
+### Values
+
+Page [Lamma Rete (alternate version)](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) with only first forecast (2015-08-05)
+
+* Requests : 68
+* Total weight (KB) : 813.73
+* Load time (s) : 4.79
+
+Page [Lamma2T](http://mm3g.ovh/lamma2t/) (containing 37 forecasts) (2015-08-05)
+
+* Requests : 32
+* Total weight (KB) : 817,43
+* Load time (s) : 1.03 
