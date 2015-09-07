@@ -1,13 +1,16 @@
 <?php
 
-define('HOUR_INCREMENT', '1');
-define('MAX_FORECAST', '36'); 
+
+define('MAX_FORECAST', '56'); 
 /* 
  * Values for MAX_FORECAST defined by LammaRete behavior :
  * - from 0 to 36  : step between 2 forecasts = 1 hour
  * - from 37 to 48 : step between 2 forecasts = 3 hours
  * - from 49 to 56 : step between 2 forecasts = 6 hours
  */
+
+//define('HOUR_INCREMENT', '1');
+$myHourIncrement=1;
 
 $myModelInitDate = NULL;
 $myModelValidDate = NULL;
@@ -48,6 +51,8 @@ if ( $myTimeStamp <= $myModelRun01Utc ) {
 	$myModelInitDate = $myModelInitDate->sub(new DateInterval('P1D')); // P1D = Period 1 day cf http://php.net/manual/fr/dateinterval.construct.php
 	$myModelInitDate = $myModelInitDate->setTime(12, 00);
 	$myLoopInit = "9";
+        
+        
 
 } elseif ($myTimeStamp >= $myModelRun02Utc ) {
 	//  après 21h30 UTC: init = J à 12h UTC
@@ -61,13 +66,21 @@ if ( $myTimeStamp <= $myModelRun01Utc ) {
 	$myModelInitDate = $myModelInitDate->setTime(00, 00);
 	$myLoopInit = "7";
 }
+/* 
+* OK now *compute* myLoopInit so that forecasts shown begin at the hour of 
+* browsing (which timezone is always set to Paris, because it is the legal 
+* time of this navigation zone)
+*/
+$myInterval = $myTimeStamp->diff($myModelInitDate);
+$myLoopInit = $myInterval->format('%h');
+        
 $myModelInitDate->setTimezone($tzParis);
 ?>
 
 <!DOCTYPE html> 
 <html lang="fr">
 <head>
-<title>Prévisions Météo Bouches de Bonifacio / Archipel Maddalena de LammaRete adapté par Matthieu 2T</title>
+<title>Lamma2T : Prévisions Météo Bouches de Bonifacio / Maddalena de LammaRete adapté par Matthieu 2T</title>
 <meta charset="UTF-8" >
 <style type="text/css">
 .tzSmall {font-size: small; font-weight:normal;}
@@ -123,8 +136,7 @@ function transition($curr, $next) {
 }
 </script>
 
-<h1>Prévisions météo pour mes stages Glénans Bouches de Bonif / Archipel Maddalena</h1>
-<p><a href="#metaInfo">Pourquoi cette page ?</a></p>
+<h1>Lamma2T : Prévisions météo Bouches de Bonif / Maddalena</h1>
 
 <button id="prev">&lt; Précédent</button>
 <button id="next">Suivant &gt;</button>
@@ -142,7 +154,7 @@ $myImageExt=".optimised.png";
 $myModelValidDate = $myModelInitDate;
 $myDateIntervalString = "PT" . $myLoopInit . "H";;
 $myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
-for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
+for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=1) {
 	$myImageNumber = $i+1;
         $j = $i - $myLoopInit;
         
@@ -156,7 +168,14 @@ for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=HOUR_INCREMENT) {
 	echo "  </p>\n \n";
         echo "</div>";
 	
-	$myDateIntervalString = "PT" . HOUR_INCREMENT . "H";;
+        /* see MAX_FORECASTS explanations for details */
+        if ( $i >= 36 ) {
+            $myHourIncrement+=2;
+        } elseif ( $i >= 48 ) {
+            $myHourIncrement +=5;
+        }
+        
+	$myDateIntervalString = "PT" . $myHourIncrement . "H";;
 	$myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
 }
 ?>
