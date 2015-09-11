@@ -1,13 +1,23 @@
 <?php
 
 use DateTime;
+use DateTimeZone;
+
+const MAX_FORECAST = "57"; //count begins from 1 (not 0) to MAX_FORECAST
+
+$tzUTC = new DateTimeZone('UTC');
+$tzParis = new DateTimeZone('Europe/Paris');
+
+$myTimeStamp = new DateTime("now", $tzParis);
+$myTimeStamp->setTimezone($tzUTC);
 
 class Forecast {
-    # Images directly from LammaRete (without crop nor optimisation)
 
-    const WIND_URL_STUB = "http://www.lamma.rete.toscana.it/models/ventoemare/wind10m_N_web_";
+    // Images directly from LammaRete (without crop nor optimisation)
+    const WIND_URL_ORIG_STUB = "http://www.lamma.rete.toscana.it/models/ventoemare/wind10m_N_web_";
+    const WIND_URL_ORIG_EXT = ".png";
     const WIND_URL_OPTIMISED_STUB = "images_2optimised/wind10m_N_web_";
-    const WIND_URL_EXT = ".png";
+    const WIND_URL_OPTIMISED_EXT = ".optimised.png";
 
     /*
      * Forecasts are given by LammaRete :
@@ -18,13 +28,17 @@ class Forecast {
     const STEPS_OF_1HOUR_FORECASTS = 37;
     const STEPS_OF_3HOURS_FORECASTS = 49;
 
+    public $modelInitDate = "NULL";
+
     function __construct(int $i) {
         // Construct the URL of the image of the forecast
-        $this->ImageUrlOrig = self::WIND_URL_STUB . $i . self::WIND_URL_EXT;
-        $this->ImageUrlOptimised = self::WIND_URL_OPTIMISED_STUB . $i . self::WIND_URL_EXT;
+        $this->ImageUrlOrig = self::WIND_URL_ORIG_STUB . $i . self::WIND_URL_ORIG_EXT;
+        $this->ImageUrlOptimised = self::WIND_URL_OPTIMISED_STUB . $i . self::WIND_URL_OPTIMISED_EXT;
+
+        /* @var $modelInitDate DateTime */
+        $modelInitDate = computeModelInitDate();
 
         // Construct the timestamp of the forecast ("validDate")
-        $modelInitDate = computeModelInitDate();
         $this->validDate = computeModelValidDate($i, $modelInitDate);
     }
 
@@ -32,12 +46,12 @@ class Forecast {
      * Compute the timestamp of the run of LammaRete ("initDate") based on
      * the current hour
      */
-    function computeModelInitDate() {
-        $tzUTC = new DateTimeZone('UTC');
-        $tzParis = new DateTimeZone('Europe/Paris');
 
-        $myTimeStamp = new DateTime("now", $tzParis);
-        $myTimeStamp->setTimezone($tzUTC);
+    function computeModelInitDate() {
+        global $tzUTC;
+        global $tzParis;
+        global $myTimeStamp;
+        $myModelInitDate = "NULL";
 
         // UTC hours of model updates:
         // * http://www.lamma.rete.toscana.it/meteo/modelli/wrf-info-sul-modello
@@ -73,6 +87,7 @@ class Forecast {
      * - the timestamp of the run of the model ("initDate")
      * - the number of the forecast (describing the time shift from the init)
      */
+
     function computeModelValidDate(int $i, DateTime $modelInitDate) {
         $timeShiftInHours = NULL;
 
@@ -96,68 +111,42 @@ class Forecast {
 
 }
 
-define('MAX_FORECAST', '56');
 /*
- * Values for MAX_FORECAST defined by LammaRete behavior :
- * - from 0 to 36  : step between 2 forecasts = 1 hour
- * - from 37 to 48 : step between 2 forecasts = 3 hours
- * - from 49 to 56 : step between 2 forecasts = 6 hours
+ * Construct the array of all 57 forecasts
  */
 
-//define('HOUR_INCREMENT', '1');
-$myHourIncrement = 1;
-
-$myModelInitDate = NULL;
-$myModelValidDate = NULL;
-
-$myDateFormat = 'l j F Y H:i';
-$myDateFormat2 = 'D j/m/y H\hi e';
-$myDateFormatI18n = '%a %e/%m/%y %k\h%M e';
-
-$myDateFormatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN, "EEEE dd/MM/yy HH'h'");
-$myDateFormatterTz = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN, "VVVV");
-
-$myTimeStamp = new DateTime("now", $tzParis);
-$myModelRun01Utc = new DateTime("now", $tzParis);
-$myModelRun02Utc = new DateTime("now", $tzParis);
-
-$myTimeStamp->setTimezone($tzUTC);
-$myModelRun01Utc->setTimezone($tzUTC);
-$myModelRun02Utc->setTimezone($tzUTC);
-
-// UTC hours of model updates:
-// * http://www.lamma.rete.toscana.it/meteo/modelli/wrf-info-sul-modello
-// * http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello
-$myModelRun01Utc = $myModelRun01Utc->setTime(7, 30);
-$myModelRun02Utc = $myModelRun02Utc->setTime(21, 30);
-
-if ($myTimeStamp <= $myModelRun01Utc) {
-    // avant 7h30 UTC: init = J-1 à 12h UTC
-    $myModelInitDate = new DateTime("now", $tzUTC);
-    $myModelInitDate = $myModelInitDate->sub(new DateInterval('P1D')); 
-    // P1D = Period 1 day cf http://php.net/manual/fr/dateinterval.construct.php or http://php.net/manual/fr/class.dateinterval.php
-    $myModelInitDate = $myModelInitDate->setTime(12, 00);
-    $myLoopInit = "9";
-} elseif ($myTimeStamp >= $myModelRun02Utc) {
-    //  après 21h30 UTC: init = J à 12h UTC
-    $myModelInitDate = new DateTime("now", $tzUTC);
-    $myModelInitDate = $myModelInitDate->setTime(12, 00);
-    $myLoopInit = "9";
-} else {
-    // entre 7h30 et 21h30 UTC: init = J à 00h UTC
-    $myModelInitDate = new DateTime("now", $tzUTC);
-    $myModelInitDate = $myModelInitDate->setTime(00, 00);
-    $myLoopInit = "7";
+function initLamma2T() {
+    $forecasts = array();
+    for ($i = 1; $i++; $i <= MAX_FORECAST) {
+        $forecasts[$i] = new Forecast($i);
+    }
 }
-/*
- * OK now *compute* myLoopInit so that forecasts shown begin at the hour of 
- * browsing (which timezone is always set to Paris, because it is the legal 
- * time of this navigation zone)
- */
-$myInterval = $myTimeStamp->diff($myModelInitDate);
-$myLoopInit = $myInterval->format('%h');
 
-$myModelInitDate->setTimezone($tzParis);
+function displayForecasts() {
+    global $myTimeStamp;
+    global $forecasts;
+
+    $myDateFormatter = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN, "EEEE dd/MM/yy HH'h'");
+    $myDateFormatterTz = new IntlDateFormatter('fr_FR', IntlDateFormatter::LONG, IntlDateFormatter::NONE, 'Europe/Paris', IntlDateFormatter::GREGORIAN, "VVVV");
+
+    // We don't want to display forecasts that are in the past, so determine by
+    // which one to begin
+    /* @var $myInterval DateTime */
+    $myInterval = $myTimeStamp->diff($forecasts->modelInitDate);
+    $firstForecastIndexforNow = $myInterval->format('%h');
+
+    for ($i = $firstForecastIndexforNow; $i++; $i <= MAX_FORECAST) {
+        echo "<div class=\"forecast-unit\" id=\"forecast-" . $i . "\">";
+        echo "  <h2>" . $myDateFormatter->format($forecasts[$i]->validDate);
+        echo " <span class=\"tzSmall\">" . $myDateFormatterTz->format($forecasts[$i]->validDate) . "</span>";
+        echo "</h2>\n";
+        echo "  <p>";
+        echo "      <img src=\"" . $forecasts[$i]->ImageUrlOptimised. "\" ";
+        echo "      alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($forecasts[$i]->validDate) . "\"/>";
+        echo "  </p>\n \n";
+        echo "</div>";
+    }
+}
 ?>
 
 <!DOCTYPE html> 
@@ -225,46 +214,7 @@ $myModelInitDate->setTimezone($tzParis);
         <button id="next">Suivant &gt;</button>
 
         <div class="slideshow">
-
-<?php
-# Images directly from LammaRete (without crop nor optimisation)
-$myUrlStub = 'http://www.lamma.rete.toscana.it/models/ventoemare/wind10m_N_web_';
-$myImageExt = ".png";
-# Images with local copy (cropped and optimised)
-$myUrlStub = 'images_2optimised/wind10m_N_web_';
-$myImageExt = ".optimised.png";
-
-$myModelValidDate = $myModelInitDate;
-$myDateIntervalString = "PT" . $myLoopInit . "H";
-;
-$myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
-for ($i = $myLoopInit; $i <= MAX_FORECAST; $i+=1) {
-    $myImageNumber = $i + 1;
-    $j = $i - $myLoopInit;
-
-    echo "<div class=\"forecast-unit\" id=\"forecast-" . $j . "\">";
-    echo "  <h2>" . $myDateFormatter->format($myModelValidDate);
-    echo " <span class=\"tzSmall\">" . $myDateFormatterTz->format($myModelValidDate) . "</span>";
-    echo "</h2>\n";
-    echo "  <p>";
-    echo "      <img src=\"" . $myUrlStub . $myImageNumber . $myImageExt . "\" ";
-    echo "      alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($myModelValidDate) . "\"/>";
-    echo "  </p>\n \n";
-    echo "</div>";
-
-    /* see MAX_FORECASTS explanations for details */
-    if ($i >= 36) {
-        $myHourIncrement+=2;
-    } elseif ($i >= 48) {
-        $myHourIncrement +=5;
-    }
-
-    $myDateIntervalString = "PT" . $myHourIncrement . "H";
-    ;
-    $myModelValidDate = $myModelValidDate->add(new DateInterval($myDateIntervalString));
-}
-?>
-
+            <?php displayForecasts(); ?>
         </div>
 
         <h2 id="metaInfo">Informations</h2>
