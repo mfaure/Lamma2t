@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <title>Lamma2T : LammaRete adapté par Matthieu 2T</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Lamma2T : Prévisions météo Bouches de Bonif / Maddalena</h1>
+        <h2>Pourquoi cette page ?</h2>
+        <p>
+            J'ai réalisé cette page pour mes besoins propres de navigation dans 
+            les bouches de Bonficio et l'Archipel de la Maddalena, typiquement 
+            lors d'encadrement de stages à l'école de voile Les Glénans.
+        </p>
+        <p>
+            Le site <a href="http://www.lamma.rete.toscana.it/meteo/modelli/ventomare" lang="it">
+                Consorzio LaMMA Rete</a> est particulièrement utile car il offre
+            une représentation visuelle du champs de vent et ceci heure par 
+            heure. Par contre l'interface utilisateur du site est assez peu 
+            pratique, surtout sur téléphone mobile et en réseau 3G.
+        </p>
+        <p>
+            C'est pour répondre à ce besoin que j'ai créé cette page. Si je 
+            résume mon cahier des charges, ça donne ceci : 
+        </p>
+        <ul>
+            <li>
+                Avoir en une seule page, les prévisions de vent toutes les 2 
+                heures pour les 36 heures à venir.
+            </li>
+            <li>
+                Avoir l'heure légale de chaque prévision (sans devoir faire de 
+                calcul de UTC/heure légale, et ce été comme hiver).
+            </li>
+            <li>
+                Optimiser la page pour la consultation en 3G (application des t
+                echniques "webperf", i.e. minification du code, optimisation des
+                images, réduction du nombre de requêtes DNS)
+            </li>
+        </ul>
+        <h2>Mises à jour des prévisions</h2>
+        <ul>
+            <li>
+                7h30 <abbr title="Temps Universel Coordonné">UTC</abbr> 
+                (9h30 en été, 8h30 en hiver) s'appuyant sur les données de 0h UTC
+            </li>
+            <li>
+                21h30 UTC (23h30 en été, 22h30 en hiver) s'appuyant sur les 
+                données de 12h UTC
+            </li>
+        </ul>
+        <p>
+            Détail de <a href="http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello">
+            mises à jour du modèle WW3 LaMMA RETE (en italien)</a>
+        </p>
+        <h2>Historique des modifications</h2>
+        <ul>
+            <li>
+                Été 2014 : création en mode <span lang="en">quick and dirty</span>.
+            </li>
+            <li>
+                Été 2015 : refactorisation du code spaghetti en code objet. Ajout 
+                de toutes les prévisions (jusqu'à 120h au lieu de 36 auparavent)
+            </li>
+        </ul>
+        <h2>Contact</h2>
+        <p>matthieu CHEZ stramanari.eu</p>
+        <footer>
+            Matthieu 2T - matthieu CHEZ stramanari.eu
+        </footer>
+    </body>
+</html>
