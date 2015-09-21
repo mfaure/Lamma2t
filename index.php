@@ -282,6 +282,10 @@ initLamma2T();
             .slidenav button.current:focus {
                 border: 2px dashed #036;
             }
+            .slidenav button[data-action=start],
+            .slidenav button[data-action=stop] {
+                font-weight: normal;
+            }
         </style>
     </head>
     <body>
@@ -333,6 +337,10 @@ initLamma2T();
             var myCarousel = (function () {
 
                 var carousel, slides, index, slidenav, settings, timer, setFocus, animationSuspended, announceSlide = false;
+                var timeBetweenSlides = 1000;
+                //var pauseChar="&#9612;&#9612;";
+                var pauseChar="&#9614;&#9614;";
+                var playChar="&#9654;";
 
                 function forEachElement(elements, fn) {
                     for (var i = 0; i < elements.length; i++)
@@ -394,9 +402,13 @@ initLamma2T();
                             var li = document.createElement('li');
 
                             if (settings.startAnimated) {
-                                li.innerHTML = '<button data-action="stop"><span class="visuallyhidden">Stop Animation </span>￭</button>';
+                                li.innerHTML = '<button data-action="stop">' +
+                                               '<span class="visuallyhidden">Stop Animation </span>' +
+                                               pauseChar + '</button>';
                             } else {
-                                li.innerHTML = '<button data-action="start"><span class="visuallyhidden">Start Animation </span>▶</button>';
+                                li.innerHTML = '<button data-action="start">' +
+                                                '<span class="visuallyhidden">Start Animation </span>' +
+                                                playChar + '</button>';
                             }
 
                             slidenav.appendChild(li);
@@ -467,7 +479,7 @@ initLamma2T();
                     setSlides(index);
 
                     if (settings.startAnimated) {
-                        timer = setTimeout(nextSlide, 5000);
+                        timer = setTimeout(nextSlide, timeBetweenSlides);
                     }
                 }
 
@@ -528,7 +540,7 @@ initLamma2T();
                     setSlides(new_current, false, 'prev');
 
                     if (settings.animate) {
-                        timer = setTimeout(nextSlide, 5000);
+                        timer = setTimeout(nextSlide, timeBetweenSlides);
                     }
 
                 }
@@ -550,16 +562,16 @@ initLamma2T();
                     settings.animate = false;
                     animationSuspended = false;
                     _this = carousel.querySelector('[data-action]');
-                    _this.innerHTML = '<span class="visuallyhidden">Start Animation </span>▶';
+                    _this.innerHTML = '<span class="visuallyhidden">Start Animation </span>' + playChar;
                     _this.setAttribute('data-action', 'start');
                 }
 
                 function startAnimation() {
                     settings.animate = true;
                     animationSuspended = false;
-                    timer = setTimeout(nextSlide, 5000);
+                    timer = setTimeout(nextSlide, timeBetweenSlides);
                     _this = carousel.querySelector('[data-action]');
-                    _this.innerHTML = '<span class="visuallyhidden">Stop Animation </span>￭';
+                    _this.innerHTML = '<span class="visuallyhidden">Stop Animation </span>' + pauseChar;
                     _this.setAttribute('data-action', 'stop');
                 }
 
@@ -585,7 +597,7 @@ initLamma2T();
             c.init({
                 id: 'c',
                 slidenav: true,
-                animate: false,
+                animate: true,
                 startAnimated: false
             });
         </script>
