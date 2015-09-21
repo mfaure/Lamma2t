@@ -152,6 +152,7 @@ initLamma2T();
     <head>
         <title>Lamma2T : Prévisions Météo Bouches de Bonifacio / Maddalena de LammaRete adapté par Matthieu 2T</title>
         <meta charset="UTF-8" >
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style type="text/css">
             .tzSmall {font-size: small; font-weight:normal;}
             
@@ -210,12 +211,12 @@ initLamma2T();
             .btn-next {
                 position:absolute;
                 z-index: 700;
-                top: 50%;
-                margin-top: -2.5em;
+                top: 28%;
+                /*margin-top: -2.5em;*/
                 border:0;
                 background: rgba(255,255,255,.6);
                 line-height: 1;
-                padding:2em .5em;
+                padding:8em 1.5em;
                 transition: padding .4s ease-out;
             }
 
@@ -229,12 +230,14 @@ initLamma2T();
 
             .btn-prev {
                 left:0;
-                border-radius: 0 .25em .25em 0;
+                border-radius: 0 1.5em 1.5em 0;
+                margin-left: 34px;
             }
 
             .btn-next {
                 right:0;
-                border-radius: .25em 0 0 .25em;
+                border-radius: 1.5em 0 0 1.5em;
+                margin-right: 77px;
             }
 
             .carousel.with-slidenav {
@@ -243,7 +246,7 @@ initLamma2T();
             }
             .slidenav {
                 position: absolute;
-                bottom:1em;
+                bottom:0.5em;
                 left: 0;
                 right: 0;
                 text-align: center;
@@ -251,7 +254,7 @@ initLamma2T();
 
             .slidenav li {
                 display:inline-block;
-                margin: 0 .5em;
+                margin: 0.1em .5em;
             }
 
             .slidenav button {
@@ -405,7 +408,7 @@ initLamma2T();
                                 var klass = (i === 0) ? 'class="current" ' : '';
                                 var kurrent = (i === 0) ? ' <span class="visuallyhidden">(Current Slide)</span>' : '';
 
-                                li.innerHTML = '<button ' + klass + 'data-slide="' + i + '"><span class="visuallyhidden">News</span> ' + (i + 1) + kurrent + '</button>';
+                                li.innerHTML = '<button ' + klass + 'data-slide="' + i + '"><span class="visuallyhidden">Forecast</span> ' + (i + 1) + kurrent + '</button>';
                                 slidenav.appendChild(li);
                             });
                         }
@@ -503,10 +506,10 @@ initLamma2T();
                         var buttons = carousel.querySelectorAll('.slidenav button[data-slide]');
                         for (var j = buttons.length - 1; j >= 0; j--) {
                             buttons[j].className = '';
-                            buttons[j].innerHTML = '<span class="visuallyhidden">News</span> ' + (j + 1);
+                            buttons[j].innerHTML = '<span class="visuallyhidden">Forecast</span> ' + (j + 1);
                         }
                         buttons[new_current].className = "current";
-                        buttons[new_current].innerHTML = '<span class="visuallyhidden">News</span> ' + (new_current + 1) + ' <span class="visuallyhidden">(Current Slide)</span>';
+                        buttons[new_current].innerHTML = '<span class="visuallyhidden">Forecast</span> ' + (new_current + 1) + ' <span class="visuallyhidden">(Current Slide)</span>';
                     }
 
                     index = new_current;
