@@ -3,22 +3,32 @@
 # 20140827 mfaure
 
 ImgRootDir="/var/www-vhosts/mm3g.ovh/lamma2t/images"
-ImgCropDir="${ImgRootDir}_1crop"
-ImgOptimisedDir="${ImgRootDir}_2optimised"
+ImgOptimisedDir="${ImgRootDir}_optimised"
 
-UrlStub="http://www.lamma.rete.toscana.it/models/ventoemare"
-ImageStub="wind10m_N_web_"
+# For wind
+UrlStub_wind="http://www.lamma.rete.toscana.it/models/ventoemare"
+ImageStub_wind="wind10m_N_web_"
+
+# For sea swell
+UrlStub_swell="http://www.lamma.rete.toscana.it/models/ww3_gfs_lr/last"
+ImageStub_swell="swh_N_web_"
+
 ImageExt=".png"
-ImageExtCrop=".crop.png"
 ImageExtOptimised=".optimised.png"
 
+function downloadImage() {
+    # 1st param: URL base
+    UrlStub="$1"
+    # 2nd param: basename of the file
+    ImageStub="$2"
+    # 3rd param: index
+    i="$3"
 
-# 1) Remove previous downloaded images
-rm -rf "${ImgRootDir}/*.${ImageExt}"
-rm -rf "${ImgCropDir}/*.${ImageExt}"
-rm -rf "${ImgOptimisedDir}/*.${ImageExt}"
+    wget -q --passive "${UrlStub}/${ImageStub}${i}${ImageExt}" -O "${ImgRootDir}/${ImageStub}${i}${ImageExt}" && \
+        pngcrush -q  "${ImgRootDir}/${ImageStub}${i}${ImageExt}" "${ImgOptimisedDir}/${ImageStub}${i}${ImageExtOptimised}"
+}
 
-# 2) Download images
+function downloadImages() {
 # First seven images are not downloaded because when the model is published,
 # those seven forecasts are in the past (e.g. forecasts from 0h to 7h whereas
 # model is published at 7:30am). Thus :
@@ -27,7 +37,14 @@ ImgIndexStart=8
 ImgIndexEnd=57
 
 for i in $(seq ${ImgIndexStart} ${ImgIndexEnd}) ; do
-	wget -q --passive "${UrlStub}/${ImageStub}${i}${ImageExt}" -O "${ImgRootDir}/${ImageStub}${i}${ImageExt}" && \
-	pngcrush -q  "${ImgRootDir}/${ImageStub}${i}${ImageExt}" "${ImgOptimisedDir}/${ImageStub}${i}${ImageExtOptimised}"
+        downloadImage "${UrlStub_wind}" "${ImageStub_wind}" "${i}"
+        downloadImage "${UrlStub_swell}" "${ImageStub_swell}" "${i}"
 done
+}
 
+# 1) Remove previous downloaded images
+rm -rf "${ImgRootDir}/*.${ImageExt}"
+rm -rf "${ImgOptimisedDir}/*.${ImageExt}"
+
+# 2) Download images
+downloadImages
