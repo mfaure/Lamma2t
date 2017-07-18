@@ -1,72 +1,33 @@
 # Lamma2T
 
- An enhanced view of Consorzio Lamma Rete weather forecast in Bonifacio (France) / Maddalena (Italia)
+ A performance optimised and user-experience enhanced view of Consorzio Lamma Rete weather forecast for Bonifacio (France) / Maddalena archipelago (Italia)
 
-## Problem
+## Issues encountered
 
 Using [Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) I encounter two main issues :
 
-* The geographical zone (e.g. Bonifacio) is not part of the URL: user must do an action to get to it.
-* Webpage is heavy and not optimised for 3G (data on cell phone), and this may be costy if you are abroad
+* Getting accessing to the Bonifacio forecasts is tedious.
+* Each request is slow, and moreover you have to make a new request for each new hour of the forecast, which is really annoying.
+* The page of the forecast contains lots of useless information, including heavy images, which slows down the loading of the page. Having to reload the page each time you want a new hour for the forecast, you have to be really zen before getting mad :)
+* The page is not optimised for being viewed on mobile devices.
+* Last, the mobile app of Lamma Rete doesn't solve any of these issues.
 
-## Solution
+## Solutions brought by Lamma2T
 
-* Have a single page optimised for web performance
-* Enhance the User eXperience
+Solve all the issues listed above by having a single page optimised, which means:
 
-## Prerequesites
+* All the hours of the forecast are loaded in **one time** (no more waiting between two hours of a forecast)
+* The hours of a forecast are translated to local time of Bonifacio / Maddalena (no more headaches computing the local hour wondering whether to add or subtract one or two hours)
+* Getting to the next or previous hour of forecast is now easy, even on a tiny screen and with your big hairy and imprecise finger :)
+* The images are much more lighter
+* Loading time: increased by 66% (!)
 
-* Ubuntu 14.04
-* wget
-* pngcrush
-* PHP 5.3
-* php5-intl (IntlDateFormatter)
-* Gulp
+Noteworthy info: all meteorological data is **NOT** modified by Lamma2t, it is exactly the same as on the original LammaRete site. (I have no legitimacy for weather forecasts, but [I think I do for web sites](http://www.linkedin.com/in/matthieufaure) ;) )
 
-One click dependency install : `sudo apt-get install wget pngcrush php5-intl`
+## Usage
 
-## Install
+Simply go to http://mm3g.ovh/ and follow the **Lamma2T** link.
 
-`gulp default`
+## Contact
 
-## Web performance
-
-Gains (lower is better):
-
-* Number of requests: -30% (from 68 to 47)
-* Loading time: -66% (from 3.5s to 1.2s)
-
-### Methodology
-
-Use Firefox, Press CTRL-SHIT-I, use Network panel and hard-reload page (CTRL-SHIT-R).
-
-Make 10 measures, remove best and worst values, and compute average of the 8 remaining values.
-
-### Values on 2015-10-03
-
-Page [Lamma Rete (alternate version)](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) with only first forecast
-
-* Requests : 68
-* Total weight (KB) : 843
-* Load time (s) : 3.51
-
-Page [Lamma2T](http://mm3g.ovh/lamma2t/) (containing now 44 forecasts) 
-
-* Requests : 47
-* Total weight (KB) : 1157
-* Load time (s) :  1.2
-
-
-### Values on 2015-08-05
-
-Page [Lamma Rete (alternate version)](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) with only first forecast
-
-* Requests : 68
-* Total weight (KB) : 813.73
-* Load time (s) : 4.79
-
-Page [Lamma2T](http://mm3g.ovh/lamma2t/) (containing 37 forecasts) 
-
-* Requests : 32
-* Total weight (KB) : 817,43
-* Load time (s) : 1.03 
+matthieu2T AT stramanari.eu
