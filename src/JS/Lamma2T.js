@@ -303,10 +303,19 @@ var myCarousel = (function () {
     };
 });
 
-var c = new myCarousel();
-c.init({
-    id: 'c',
+var c1 = new myCarousel();
+var c2 = new myCarousel();
+
+c1.init({
+    id: 'carousel-wind',
     slidenav: true,
-    animate: true,
+    animate: false,
+    startAnimated: false
+});
+
+c2.init({
+    id: 'carousel-swell',
+    slidenav: true,
+    animate: false,
     startAnimated: false
 });

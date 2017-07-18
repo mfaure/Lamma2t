@@ -10,12 +10,22 @@ $myTimeStamp->setTimezone($tzUTC);
 $modelInitDate = computeInitDate();
 $forecasts = array();
 
+/**
+ * Class Forecast
+ *
+ * A forecast contains the following fields:
+ * - the hour of the forecast
+ * - the image's URL of the WIND forecast at this hour
+ * - the image's URL of the SWELL forecast at this hour
+ */
 class Forecast
 {
 
     // Images optimised, with relative (local) URL
-    const WIND_URL_OPTIMISED_STUB = "images_2optimised/wind10m_N_web_";
+    const WIND_URL_OPTIMISED_STUB = "images_optimised/wind10m_N_web_";
     const WIND_URL_OPTIMISED_EXT = ".optimised.png";
+    const SWELL_URL_OPTIMISED_STUB = "images_optimised/swh_N_web_";
+    const SWELL_URL_OPTIMISED_EXT = ".optimised.png";
 
     /*
      * Forecasts are given by LammaRete :
@@ -59,7 +69,8 @@ class Forecast
     function __construct($i)
     {
         // Construct the URL of the image of the forecast
-        $this->ImageUrlOptimised = self::WIND_URL_OPTIMISED_STUB . $i . self::WIND_URL_OPTIMISED_EXT;
+        $this->UrlImageOptimisedWind = self::WIND_URL_OPTIMISED_STUB . $i . self::WIND_URL_OPTIMISED_EXT;
+        $this->UrlImageOptimisedSwell = self::SWELL_URL_OPTIMISED_STUB . $i . self::SWELL_URL_OPTIMISED_EXT;
 
         // Construct the timestamp of the forecast ("validDate")
         $this->validDate = $this->computeValidDate($i);
@@ -121,19 +132,55 @@ function displayForecasts()
     $myInterval = $myTimeStamp->diff($modelInitDate);
     $firstForecastIndexforNow = 1 + $myInterval->format('%h');
 
+    // Wind
+    echo '<div id="carousel-wind" class="carousel">';
+
     echo "<ul>";
     for ($i = $firstForecastIndexforNow; $i <= MAX_FORECAST; $i++) {
-        echo "<li class=\"slide\" id=\"forecast-" . $i . "\">";
-        echo "  <h2>" . $myDateFormatter->format($forecasts[$i]->validDate);
+        echo "<li class=\"slide\" id=\"forecast-wind-" . $i . "\">";
+        echo '  <div class="top-link"><a href="#mini-nav">&#8593; Retour en haut</a></div>';
+        echo "  <h2>Vent - " . $myDateFormatter->format($forecasts[$i]->validDate);
         echo "     <span class=\"tzSmall\">heure locale</span>";
         echo "  </h2>\n";
         echo "  <p>";
-        echo "      <img src=\"" . $forecasts[$i]->ImageUrlOptimised . "\" ";
-        echo "      alt=\"Prévisions météo Bonifacio Archipel Maddalena " . $myDateFormatter->format($forecasts[$i]->validDate) . "\"/>";
+        echo "      <img src=\"" . $forecasts[$i]->UrlImageOptimisedWind . "\" ";
+        echo "      alt=\"Prévisions météo VENT Bonifacio Archipel Maddalena " . $myDateFormatter->format($forecasts[$i]->validDate) . "\"/>";
         echo "  </p>\n \n";
         echo "</li>";
     }
+    $LastSlideIndex = (int)MAX_FORECAST + 1;
+    echo '<li class="slide" id="forecast-wind-"' . $LastSlideIndex . '">';
+    echo "  <h2>Vent - FIN</h2>\n";
+    echo "  <p>Fin</p>\n \n";
+    echo "</li>";
     echo "</ul>";
+    echo "</div>";
+
+    // Swell
+    echo '<div id="carousel-swell" class="carousel">';
+    echo "<ul>";
+    for ($i = $firstForecastIndexforNow; $i <= MAX_FORECAST; $i++) {
+        echo "<li class=\"slide\" id=\"forecast-swell-" . $i . "\">";
+        echo '  <div class="top-link"><a href="#mini-nav">&#8593; Retour en haut</a></div>';
+        echo "  <h2>Houle - " . $myDateFormatter->format($forecasts[$i]->validDate);
+        echo "     <span class=\"tzSmall\">heure locale</span>";
+        echo "  </h2>\n";
+        echo "  <p>";
+        echo "      <img src=\"" . $forecasts[$i]->UrlImageOptimisedSwell . "\" ";
+        echo "      alt=\"Prévisions météo HOULE Bonifacio Archipel Maddalena " . $myDateFormatter->format($forecasts[$i]->validDate) . "\"/>";
+        echo "  </p>\n \n";
+        echo "</li>";
+    }
+    $LastSlideIndex = (int)MAX_FORECAST + 1;
+    echo '<li class="slide" id="forecast-swell-"' . $LastSlideIndex . '">';
+    echo "  <h2>Houle - FIN</h2>\n";
+    echo "  <p>Fin</p>\n \n";
+    echo "</li>";
+    echo "</ul>";
+    echo "</div>";
+    echo "</ul>";
+    echo "</div>";
+
 }
 
 /*
@@ -163,16 +210,20 @@ initLamma2T();
 </head>
 <body>
 
-<div id="c" class="carousel">
-    <?php displayForecasts(); ?>
-</div>
+<ul id="mini-nav">
+    <li><a href="#carousel-wind">Vent</a></li>
+    <li><a href="#carousel-swell">Houle</a> </li>
+    <li><a href="about.html">À propos</a> </li>
+</ul>
+
+<?php displayForecasts(); ?>
 
 <div id="about">
     <a href="about.html">À propos de Lamma2T</a>
 </div>
 
 <footer>
-    Matthieu 2T - matthieu CHEZ stramanari.eu
+    matthieu2T AT stramanari.eu
 </footer>
 
 <script src="JS/Script.js"></script>

@@ -1,66 +1,97 @@
-.tzSmall {font-size: small; font-weight:normal;}
+#mini-nav {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
 
+#mini-nav li {
+    display: inline;
+    margin-right: 1em;
+}
+
+.top-link {
+    float: right;
+    clear: right;
+}
+
+.tzSmall {
+    font-size: small;
+    font-weight: normal;
+}
+
+h2 {display: inline;}
+
+footer {
+    margin-top: 1em;
+}
+
+/* Carousel BEGIN ========================================================== */
 .visuallyhidden {
-    border: 0px none;
+    border: 0 none;
     clip: rect(0px, 0px, 0px, 0px);
     height: 1px;
     margin: -1px;
     overflow: hidden;
-    padding: 0px;
+    padding: 0;
     position: absolute;
     width: 1px;
 }
 
 .carousel, .slide {
     width: 751px;
-    padding:0;
-    margin: 0;
+    padding: 0;
+    margin: 1em 0 1em;
     overflow: hidden;
 }
+
 .carousel {
     position: relative;
 }
+
 .carousel ul {
-    margin:0;
+    margin: 0;
     padding: 0;
 }
+
 .slide {
     /*position: absolute;*/
     height: 650px; /* = 580px (img height) + 70 ()height of the h2, manually measured) */
     background-size: cover;
     position: relative;
-    margin-bottom:1em;
-    border:1px solid #333;
+    margin-bottom: 1em;
+    border: 1px solid #333;
 }
+
 .carousel.active {
     height: 650px; /* = 580px (img height) + 70 ()height of the h2, manually measured) */
     /* overflow:hidden; */
-    position:relative;
+    position: relative;
 }
 
 .active .slide {
     border: none;
     display: none;
-    position:absolute;
-    top:0;
-    left:0;
-    z-index:200;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 200;
 }
 
 .slide.current {
-    display:block;
+    display: block;
     z-index: 500;
 }
+
 .btn-prev,
 .btn-next {
-    position:absolute;
+    position: absolute;
     z-index: 700;
     top: 28%;
     /*margin-top: -2.5em;*/
-    border:0;
-    background: rgba(255,255,255,.6);
+    border: 0;
+    background: rgba(255, 255, 255, .6);
     line-height: 1;
-    padding:8em 1.5em;
+    padding: 8em 1.5em;
     transition: padding .4s ease-out;
 }
 
@@ -69,17 +100,17 @@
 .btn-prev:hover,
 .btn-prev:focus {
     padding-left: 2em;
-    padding-right:2em;
+    padding-right: 2em;
 }
 
 .btn-prev {
-    left:0;
+    left: 0;
     border-radius: 0 1.5em 1.5em 0;
     margin-left: 33px;
 }
 
 .btn-next {
-    right:0;
+    right: 0;
     border-radius: 1.5em 0 0 1.5em;
     margin-right: 77px;
 }
@@ -88,16 +119,17 @@
     padding-bottom: 7em;
     background-color: #fff;
 }
+
 .slidenav {
     position: absolute;
-    bottom:0.5em;
+    bottom: 0.5em;
     left: 0;
     right: 0;
     text-align: center;
 }
 
 .slidenav li {
-    display:inline-block;
+    display: inline-block;
     margin: 0.1em .5em;
 }
 
@@ -106,7 +138,7 @@
     background-color: #036;
     line-height: 1em;
     height: 2em;
-    width:2em;
+    width: 2em;
     font-weight: bold;
     color: #fff;
 }
@@ -126,7 +158,10 @@
 .slidenav button.current:focus {
     border: 2px dashed #036;
 }
+
 .slidenav button[data-action=start],
 .slidenav button[data-action=stop] {
     font-weight: normal;
 }
+
+/* Carousel END ========================================================== */
