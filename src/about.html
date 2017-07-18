@@ -11,35 +11,40 @@
         <p>
             J'ai réalisé cette page pour mes besoins propres de navigation dans 
             les bouches de Bonficio et l'Archipel de la Maddalena, typiquement 
-            lors d'encadrement de stages à l'école de voile Les Glénans.
+            lors d'encadrement de stages à <a href="http://www.glenans.asso.fr/">l'école de voile Les Glénans</a>.
         </p>
         <p>
-            Le site <a href="http://www.lamma.rete.toscana.it/meteo/modelli/ventomare" lang="it">
+            Le site <a href="http://www.lamma.rete.toscana.it/modelli/vento-e-mare" lang="it">
                 Consorzio LaMMA Rete</a> est particulièrement utile car il offre
             une représentation visuelle du champs de vent et ceci heure par 
             heure. Par contre l'interface utilisateur du site est assez peu 
             pratique, surtout sur téléphone mobile et en réseau 3G.
         </p>
-        <h2>PRoblèmes rencontrés</h2>
-        <p>
-            C'est pour répondre à ce besoin que j'ai créé cette page. Si je 
-            résume mon cahier des charges, ça donne ceci : 
-        </p>
+        <h3>Problèmes rencontrés</h3>
         <ul>
-            <li>
-                Avoir en une seule page, les prévisions de vent toutes les 2 
-                heures pour les 36 heures à venir.
-            </li>
-            <li>
-                Avoir l'heure légale de chaque prévision (sans devoir faire de 
-                calcul de UTC/heure légale, et ce été comme hiver).
-            </li>
-            <li>
-                Optimiser la page pour la consultation en 3G (application des t
-                echniques "webperf", i.e. minification du code, optimisation des
-                images, réduction du nombre de requêtes DNS)
-            </li>
+            <li>Accéder depuis la page d'accueil à la prévision pour la zone Bouches de Bonifacio est laborieux</li>
+            <li>La page web de la prévision météo est lourde et lente à charger, et surtout pour chaque heure de la prévision il faut refaire une requête, ce qui est d'autant plus long. C'est clairement visible avec un mauvais réseau 3G, par exemple au mouillage de Santa Maria ou Budelli.</li>
+            <li>La page présentant la prévision est relativement lourde et contient beaucoup d'informations inutiles (logos, graphismes...). Devoir recharger cette page pour chacune des heures de la prévision relève de l'exercice de zenitude :) </li>
+            <li>La page n'est pas optimisée pour être consulté sur les mobiles.</li>
+            <li>Enfin, l'appli mobile LammaRete ne résoud aucun des problèmes listés.</li>
         </ul>
+
+        <h3>Solutions apportées par Lamma2T</h3>
+
+        <p>Répondre à toutes ces problématiques, ce qui se traduit par :</p>
+
+        <ul>
+            <li>La totalité des heures d'une prévision est chargée en <strong>une seule fois</strong> (plus besoin d'attendre quand on clique sur "suivant").</li>
+            <li>Les heures sont transcrites en heures locales pour Bonifacio / Maddalena, avec prise en compte des heures d'été et d'hiver (plus de prise de tête à se demander s'il faut ajouter ou soustraire une ou deux heures à l'heure UTC)</li>
+            <li>Accéder à la prévision suivante ou précédente est facile, même sur un petit écran avec tes gros doigts poilus et malhabiles :)</li>
+            <li>les images de la prévision sont plus légère.</li>
+            <li>Le temps de chargement a été sérieusement amélioré : gain de 66% !</li>
+        </ul>
+
+        <p>
+            Information notable : les informations météorologiques ne sont <strong>PAS</strong> modifiées par Lamma2T, ce sont exactement celle du site LammaRete. (Je n'ai pas de légitimité pour les prévisions météo, mais un peu plus pour <a href="http://www.linkedin.com/in/matthieufaure">ce qui est du web</a> ;)
+        </p>
+
         <h2>Mises à jour des prévisions</h2>
         <ul>
             <li>
@@ -55,22 +60,31 @@
             Détail de <a href="http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello">
             mises à jour du modèle WW3 LaMMA RETE (en italien)</a>
         </p>
+
         <h2>Historique des modifications</h2>
         <ul>
             <li>
-                Été 2014 : création en mode <span lang="en">quick and dirty</span>.
+                Été 2017 :
+                <ul>
+                    <li>ajout de la houle</li>
+                    <li>ajout d'un "écran blanc" comme dernière diapo (pour comprendre qu'on est arrivé au bout de la prévision)</li>
+                </ul>
             </li>
             <li>
-                Été 2015 : refactorisation du code spaghetti en code objet. Ajout 
-                de toutes les prévisions (jusqu'à 120h au lieu de 36 auparavent)
+                Été 2015 :
+                <ul>
+                    <li>refactorisation du code spaghetti en code objet</li>
+                    <li>ajout de toutes les prévisions (jusqu'à 120h au lieu de 36 auparavent)</li>
+                </ul>
+            </li>
+            <li>
+                Été 2014 : création en mode <span lang="en" style="font-style:italic;">quick and dirty</span>.
             </li>
         </ul>
+
         <h2>Contact</h2>
-        <p>matthieu CHEZ stramanari.eu</p>
-        <footer>
-            Matthieu 2T - matthieu CHEZ stramanari.eu
-        </footer>
-        
+        <p>matthieu2T CHEZ stramanari.eu</p>
+
         <script src="JS/Script.js"></script>
         <script type="text/javascript">
             var _paq = _paq || [];
