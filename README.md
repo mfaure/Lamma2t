@@ -17,6 +17,7 @@ Using [Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/model
 Solve all the issues listed above by having a single page optimised, which means:
 
 * All the hours of the forecast are loaded in **one time** (no more waiting between two hours of a forecast)
+* Hours from the past are not displayed
 * The hours of a forecast are translated to local time of Bonifacio / Maddalena (no more headaches computing the local hour wondering whether to add or subtract one or two hours)
 * Getting to the next or previous hour of forecast is now easy, even on a tiny screen and with your big hairy and imprecise finger :)
 * The images are much more lighter
@@ -30,10 +31,21 @@ Simply go to http://mm3g.ovh/ and follow the **Lamma2T** link.
 
 ## Weather forecast updates
 
+LammaRete is updated at
+
 * 7:30am UTC, 9:30am in summer, 8:30am in winter, based on the run of 0:00 UTC
 * 9:30pm UTC, 11:30pm in summer, 10:30pm in winter, based on the run of 12:00 UTC
 
+Lamma2T is updated:
+
+* in the morning at 8:30am, 8:45am, 9:30am, 9:45am,
+* in the evening at 10:30pm, 10:45pm, 11:30pm, 11:45pm
+
 Detail of [LammaRete updates, in italian](http://www.lamma.rete.toscana.it/mare/modelli/ww3-info-sul-modello)
+
+## Contribute
+
+This is application is free opensource software licensed under aGPL. [Source code](https://github.com/mfaure/Lamma2t) can be browsed and any contribution is warmly welcome !
 
 ## Contact
 
