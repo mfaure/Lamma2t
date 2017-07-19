@@ -29,4 +29,6 @@ Locally run `gulp default`. All the webapp is in the `build/` directory. Simply 
 
 ### Configure
 
-* Add piwik values to index.php and about.html (replace `MyPiwikServer`, `MyPiwikSiteId`, `MyPiwikCompleteServerSiteId`)
+* Add piwik values (replace `MyPiwikServer`, `MyPiwikSiteId`, `MyPiwikCompleteServerSiteId`) to:
+    * `index.php`
+    * `about.html`
