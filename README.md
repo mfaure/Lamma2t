@@ -45,7 +45,7 @@ Detail of [LammaRete updates, in italian](http://www.lamma.rete.toscana.it/mare/
 
 ## Contribute
 
-This is application is free opensource software licensed under aGPL. [Source code](https://github.com/mfaure/Lamma2t) can be browsed and any contribution is warmly welcome !
+This is application is free opensource software licensed under aGPL. [Source code](https://gitlab.com/matt.faure/Lamma2t) can be browsed and any contribution is warmly welcome !
 
 ## Contact
 
