@@ -2,6 +2,11 @@
 
  A performance optimised and user-experience enhanced view of Consorzio Lamma Rete weather forecast for Bonifacio (France) / Maddalena archipelago (Italia)
 
+[![](Communication/Screenshots_Lamma2t_wind.png)](http://mm3g.ovh/lamma2t/)
+
+[![](Communication/Screenshots_Lamma2t_swell.png)](http://mm3g.ovh/lamma2t/)
+
+
 ## Issues encountered
 
 Using [Lamma Rete weather forecast](http://www.lamma.rete.toscana.it/meteo/modelli/ventomare) I encounter two main issues :
